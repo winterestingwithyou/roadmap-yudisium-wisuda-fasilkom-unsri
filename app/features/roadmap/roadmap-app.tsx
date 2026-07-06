@@ -12,10 +12,13 @@ import {
 import {
   ArrowDown,
   ArrowRight,
+  ChevronDown,
   Filter,
   PanelRightClose,
   PanelRightOpen,
   Search,
+  SlidersHorizontal,
+  X,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "~/components/ui/sheet";
@@ -59,24 +62,55 @@ function getItemPosition(id: RoadmapNodeId, layout: RoadmapLayout) {
 }
 
 function Toolbar() {
+  const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(false);
   const filter = useRoadmapStore((state) => state.filter);
   const layout = useRoadmapStore((state) => state.layout);
   const query = useRoadmapStore((state) => state.query);
   const setFilter = useRoadmapStore((state) => state.setFilter);
   const setLayout = useRoadmapStore((state) => state.setLayout);
   const setQuery = useRoadmapStore((state) => state.setQuery);
+  const selectedFilter = filters.find((item) => item.value === filter)?.label ?? "Semua";
+  const selectedLayout = layout === "vertical" ? "Atas-Bawah" : "Kiri-Kanan";
 
   return (
-    <div className="flex flex-col gap-3 border-b border-white/10 bg-neutral-950/80 p-4 backdrop-blur lg:flex-row lg:items-center lg:justify-between">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-normal text-cyan-200">
-          FASILKOM UNSRI
-        </p>
-        <h1 className="mt-1 text-xl font-semibold text-white">
-          Roadmap Yudisium & Wisuda
-        </h1>
+    <div className="border-b border-white/10 bg-neutral-950/90 backdrop-blur lg:flex lg:items-center lg:justify-between lg:gap-4 lg:p-4">
+      <div className="flex items-start justify-between gap-3 p-4 lg:p-0">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-normal text-cyan-200">
+            FASILKOM UNSRI
+          </p>
+          <h1 className="mt-1 text-balance text-xl font-semibold leading-tight text-white">
+            Roadmap Yudisium & Wisuda
+          </h1>
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-zinc-400 lg:hidden">
+            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1">
+              {selectedFilter}
+            </span>
+            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1">
+              {selectedLayout}
+            </span>
+          </div>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="mt-0.5 border-white/10 bg-white/5 text-white hover:bg-white/10 lg:hidden"
+          title={isMobilePanelOpen ? "Tutup pengaturan" : "Buka pengaturan"}
+          aria-label={isMobilePanelOpen ? "Tutup pengaturan" : "Buka pengaturan"}
+          aria-expanded={isMobilePanelOpen}
+          onClick={() => setIsMobilePanelOpen((value) => !value)}
+        >
+          {isMobilePanelOpen ? <X className="size-4" /> : <SlidersHorizontal className="size-4" />}
+        </Button>
       </div>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+
+      <div
+        className={cn(
+          "grid gap-3 px-4 pb-4 lg:flex lg:items-center lg:justify-end lg:p-0",
+          isMobilePanelOpen ? "grid-rows-[1fr] opacity-100" : "hidden lg:flex"
+        )}
+      >
         <label className="relative min-w-0 sm:w-64">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
           <input
@@ -86,10 +120,10 @@ function Toolbar() {
             onChange={(event) => setQuery(event.target.value)}
           />
         </label>
-        <label className="relative">
+        <label className="relative min-w-0 sm:w-48">
           <Filter className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
           <select
-            className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-white/5 pl-9 pr-8 text-sm text-white outline-none transition focus:border-cyan-300/60 focus:ring-3 focus:ring-cyan-300/20 sm:w-40"
+            className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-white/5 pl-9 pr-9 text-sm text-white outline-none transition focus:border-cyan-300/60 focus:ring-3 focus:ring-cyan-300/20"
             value={filter}
             onChange={(event) => setFilter(event.target.value as RoadmapFilter)}
           >
@@ -99,14 +133,15 @@ function Toolbar() {
               </option>
             ))}
           </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
         </label>
-        <div className="grid grid-cols-2 gap-1 rounded-lg border border-white/10 bg-white/5 p-1">
+        <div className="grid grid-cols-2 gap-1 rounded-lg border border-white/10 bg-white/5 p-1 sm:w-[260px]">
           <Button
             type="button"
             variant={layout === "vertical" ? "default" : "ghost"}
-            size="icon"
+            size="default"
             className={cn(
-              "text-white hover:bg-white/10",
+              "h-9 gap-2 text-white hover:bg-white/10",
               layout === "vertical" && "bg-cyan-300 text-neutral-950 hover:bg-cyan-200"
             )}
             title="Tampilkan dari atas ke bawah"
@@ -114,13 +149,14 @@ function Toolbar() {
             onClick={() => setLayout("vertical")}
           >
             <ArrowDown className="size-4" />
+            <span>Atas-Bawah</span>
           </Button>
           <Button
             type="button"
             variant={layout === "horizontal" ? "default" : "ghost"}
-            size="icon"
+            size="default"
             className={cn(
-              "text-white hover:bg-white/10",
+              "h-9 gap-2 text-white hover:bg-white/10",
               layout === "horizontal" && "bg-cyan-300 text-neutral-950 hover:bg-cyan-200"
             )}
             title="Tampilkan dari kiri ke kanan"
@@ -128,6 +164,7 @@ function Toolbar() {
             onClick={() => setLayout("horizontal")}
           >
             <ArrowRight className="size-4" />
+            <span>Kiri-Kanan</span>
           </Button>
         </div>
       </div>
@@ -256,7 +293,7 @@ export function RoadmapApp() {
               : "lg:grid-cols-[minmax(0,1fr)_380px]"
           )}
         >
-          <section className="relative min-h-[calc(100dvh-94px)]">
+          <section className="relative min-h-0">
             <ReactFlow
               nodes={nodes}
               edges={edges}
