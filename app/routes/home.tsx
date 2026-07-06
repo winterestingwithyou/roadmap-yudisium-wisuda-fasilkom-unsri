@@ -1,13 +1,17 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { RoadmapApp } from "~/features/roadmap/roadmap-app";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Roadmap Yudisium & Wisuda FASILKOM UNSRI" },
+    {
+      name: "description",
+      content:
+        "Roadmap interaktif syarat yudisium dan wisuda FASILKOM UNSRI berbasis dependency graph.",
+    },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return <RoadmapApp />;
 }
