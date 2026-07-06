@@ -143,3 +143,8 @@ body {
     @apply font-sans;
   }
 }
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}

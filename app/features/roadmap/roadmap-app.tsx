@@ -1,14 +1,23 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Background,
   BackgroundVariant,
   Controls,
   MiniMap,
   ReactFlow,
+  Position,
   type Edge,
   type Node,
 } from "@xyflow/react";
-import { Filter, Search } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  Filter,
+  PanelRightClose,
+  PanelRightOpen,
+  Search,
+} from "lucide-react";
+import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "~/components/ui/sheet";
 import { roadmapItems, roadmapItemMap } from "~/data/roadmap";
 import { RoadmapDetails } from "~/features/roadmap/roadmap-details";
@@ -17,7 +26,7 @@ import { useRoadmapHydration } from "~/hooks/use-roadmap-hydration";
 import { getProgress, getRoadmapStatus, matchesRoadmapFilter } from "~/lib/roadmap";
 import { cn } from "~/lib/utils";
 import { useRoadmapStore } from "~/store/roadmap-store";
-import type { RoadmapFilter } from "~/types/roadmap";
+import type { RoadmapFilter, RoadmapLayout, RoadmapNodeId } from "~/types/roadmap";
 
 const nodeTypes = {
   roadmapNode: RoadmapNode,
@@ -25,16 +34,36 @@ const nodeTypes = {
 
 const filters: Array<{ value: RoadmapFilter; label: string }> = [
   { value: "all", label: "Semua" },
-  { value: "completed", label: "Completed" },
-  { value: "available", label: "Available" },
-  { value: "locked", label: "Locked" },
+  { value: "completed", label: "Selesai" },
+  { value: "available", label: "Bisa Dikerjakan" },
+  { value: "locked", label: "Terkunci" },
   { value: "coming-soon", label: "Coming Soon" },
 ];
 
+const verticalPositions: Record<RoadmapNodeId, { x: number; y: number }> = {
+  repository: { x: -290, y: 0 },
+  book: { x: 0, y: 0 },
+  sks112: { x: 290, y: 0 },
+  usept: { x: 580, y: 0 },
+  library: { x: -145, y: 250 },
+  yudisium: { x: 180, y: 520 },
+  graduation: { x: 180, y: 790 },
+};
+
+function getItemPosition(id: RoadmapNodeId, layout: RoadmapLayout) {
+  if (layout === "vertical") {
+    return verticalPositions[id];
+  }
+
+  return roadmapItemMap.get(id)?.position ?? { x: 0, y: 0 };
+}
+
 function Toolbar() {
   const filter = useRoadmapStore((state) => state.filter);
+  const layout = useRoadmapStore((state) => state.layout);
   const query = useRoadmapStore((state) => state.query);
   const setFilter = useRoadmapStore((state) => state.setFilter);
+  const setLayout = useRoadmapStore((state) => state.setLayout);
   const setQuery = useRoadmapStore((state) => state.setQuery);
 
   return (
@@ -71,6 +100,36 @@ function Toolbar() {
             ))}
           </select>
         </label>
+        <div className="grid grid-cols-2 gap-1 rounded-lg border border-white/10 bg-white/5 p-1">
+          <Button
+            type="button"
+            variant={layout === "vertical" ? "default" : "ghost"}
+            size="icon"
+            className={cn(
+              "text-white hover:bg-white/10",
+              layout === "vertical" && "bg-cyan-300 text-neutral-950 hover:bg-cyan-200"
+            )}
+            title="Tampilkan dari atas ke bawah"
+            aria-label="Tampilkan dari atas ke bawah"
+            onClick={() => setLayout("vertical")}
+          >
+            <ArrowDown className="size-4" />
+          </Button>
+          <Button
+            type="button"
+            variant={layout === "horizontal" ? "default" : "ghost"}
+            size="icon"
+            className={cn(
+              "text-white hover:bg-white/10",
+              layout === "horizontal" && "bg-cyan-300 text-neutral-950 hover:bg-cyan-200"
+            )}
+            title="Tampilkan dari kiri ke kanan"
+            aria-label="Tampilkan dari kiri ke kanan"
+            onClick={() => setLayout("horizontal")}
+          >
+            <ArrowRight className="size-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -102,13 +161,32 @@ function ProgressPanel() {
 export function RoadmapApp() {
   const isHydrated = useRoadmapHydration();
   const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const completedIds = useRoadmapStore((state) => state.completedIds);
   const selectedId = useRoadmapStore((state) => state.selectedId);
   const selectNode = useRoadmapStore((state) => state.selectNode);
   const filter = useRoadmapStore((state) => state.filter);
+  const layout = useRoadmapStore((state) => state.layout);
   const query = useRoadmapStore((state) => state.query);
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const selectedItem = roadmapItemMap.get(selectedId) ?? roadmapItems[0];
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const syncViewport = () => {
+      setIsDesktop(mediaQuery.matches);
+
+      if (mediaQuery.matches) {
+        setMobileDetailsOpen(false);
+      }
+    };
+
+    syncViewport();
+    mediaQuery.addEventListener("change", syncViewport);
+
+    return () => mediaQuery.removeEventListener("change", syncViewport);
+  }, []);
 
   const visibleItems = useMemo(
     () =>
@@ -124,15 +202,18 @@ export function RoadmapApp() {
       visibleItems.map((item) => ({
         id: item.id,
         type: "roadmapNode",
-        position: item.position,
+        position: getItemPosition(item.id, layout),
         selected: item.id === selectedId,
+        targetPosition: layout === "vertical" ? Position.Top : Position.Left,
+        sourcePosition: layout === "vertical" ? Position.Bottom : Position.Right,
         data: {
           item,
           status: getRoadmapStatus(item, completedSet),
           dependencyCount: item.dependencies.length,
+          layout,
         },
       })),
-    [completedSet, selectedId, visibleItems]
+    [completedSet, layout, selectedId, visibleItems]
   );
 
   const edges: Edge[] = useMemo(
@@ -167,7 +248,14 @@ export function RoadmapApp() {
     <main className="min-h-dvh overflow-hidden bg-neutral-950 text-white">
       <div className="flex min-h-dvh flex-col">
         <Toolbar />
-        <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div
+          className={cn(
+            "grid min-h-0 flex-1",
+            isSidebarCollapsed
+              ? "lg:grid-cols-[minmax(0,1fr)_4rem]"
+              : "lg:grid-cols-[minmax(0,1fr)_380px]"
+          )}
+        >
           <section className="relative min-h-[calc(100dvh-94px)]">
             <ReactFlow
               nodes={nodes}
@@ -179,6 +267,11 @@ export function RoadmapApp() {
               proOptions={{ hideAttribution: true }}
               onNodeClick={(_, node) => {
                 selectNode(node.id as typeof selectedId);
+                if (isDesktop) {
+                  setIsSidebarCollapsed(false);
+                  return;
+                }
+
                 setMobileDetailsOpen(true);
               }}
               className={cn(!isHydrated && "opacity-70")}
@@ -194,16 +287,59 @@ export function RoadmapApp() {
             </ReactFlow>
           </section>
 
-          <aside className="hidden min-h-0 border-l border-white/10 bg-neutral-950/95 lg:flex lg:flex-col">
-            <ProgressPanel />
-            <div className="min-h-0 flex-1 overflow-y-auto p-5">
-              <RoadmapDetails item={selectedItem} />
+          <aside
+            className={cn(
+              "hidden min-h-0 border-l border-white/10 bg-neutral-950/95 transition-[width] duration-200 lg:flex lg:flex-col",
+              isSidebarCollapsed ? "w-16" : "w-[380px]"
+            )}
+          >
+            <div className="flex h-14 items-center justify-between border-b border-white/10 px-4">
+              {!isSidebarCollapsed && (
+                <span className="text-sm font-medium text-white">Detail Syarat</span>
+              )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-zinc-300 hover:bg-white/10 hover:text-white"
+                title={isSidebarCollapsed ? "Buka sidebar" : "Tutup sidebar"}
+                aria-label={isSidebarCollapsed ? "Buka sidebar" : "Tutup sidebar"}
+                onClick={() => setIsSidebarCollapsed((value) => !value)}
+              >
+                {isSidebarCollapsed ? (
+                  <PanelRightOpen className="size-4" />
+                ) : (
+                  <PanelRightClose className="size-4" />
+                )}
+              </Button>
             </div>
+            {isSidebarCollapsed ? (
+              <button
+                type="button"
+                className="flex flex-1 flex-col items-center gap-3 px-2 py-4 text-left text-zinc-300 transition hover:bg-white/5 hover:text-white"
+                onClick={() => setIsSidebarCollapsed(false)}
+                aria-label="Buka detail syarat"
+              >
+                <span className="writing-vertical text-xs font-medium uppercase tracking-normal">
+                  Detail
+                </span>
+                <span className="mt-auto text-center text-[0.68rem] leading-4 text-zinc-400">
+                  Klik node untuk buka
+                </span>
+              </button>
+            ) : (
+              <>
+                <ProgressPanel />
+                <div className="min-h-0 flex-1 overflow-y-auto p-5">
+                  <RoadmapDetails item={selectedItem} />
+                </div>
+              </>
+            )}
           </aside>
         </div>
       </div>
 
-      <Sheet open={mobileDetailsOpen} onOpenChange={setMobileDetailsOpen}>
+      <Sheet open={!isDesktop && mobileDetailsOpen} onOpenChange={setMobileDetailsOpen}>
         <SheetContent side="bottom" className="max-h-[85dvh] rounded-t-lg border-white/10 bg-neutral-950 p-0 lg:hidden">
           <SheetHeader className="border-b border-white/10">
             <SheetTitle>{selectedItem.title}</SheetTitle>

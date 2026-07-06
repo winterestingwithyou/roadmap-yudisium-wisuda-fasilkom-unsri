@@ -35,3 +35,5 @@ export type RoadmapItem = {
 };
 
 export type RoadmapFilter = "all" | ComputedRoadmapStatus;
+
+export type RoadmapLayout = "vertical" | "horizontal";

@@ -1,17 +1,19 @@
 import { create } from "zustand";
 import { loadCompletedProgress, saveCompletedProgress } from "~/lib/db";
 import { getDependencyTreeIds, getDescendantTreeIds } from "~/lib/roadmap";
-import type { RoadmapFilter, RoadmapNodeId } from "~/types/roadmap";
+import type { RoadmapFilter, RoadmapLayout, RoadmapNodeId } from "~/types/roadmap";
 
 type RoadmapState = {
   completedIds: RoadmapNodeId[];
   selectedId: RoadmapNodeId;
   filter: RoadmapFilter;
+  layout: RoadmapLayout;
   query: string;
   isHydrated: boolean;
   hydrate: () => Promise<void>;
   selectNode: (id: RoadmapNodeId) => void;
   setFilter: (filter: RoadmapFilter) => void;
+  setLayout: (layout: RoadmapLayout) => void;
   setQuery: (query: string) => void;
   completeNode: (id: RoadmapNodeId, includeDependencies?: boolean) => void;
   uncompleteNode: (id: RoadmapNodeId) => void;
@@ -25,6 +27,7 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   completedIds: [],
   selectedId: "repository",
   filter: "all",
+  layout: "vertical",
   query: "",
   isHydrated: false,
   hydrate: async () => {
@@ -33,6 +36,7 @@ export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   },
   selectNode: (id) => set({ selectedId: id }),
   setFilter: (filter) => set({ filter }),
+  setLayout: (layout) => set({ layout }),
   setQuery: (query) => set({ query }),
   completeNode: (id, includeDependencies = false) => {
     const next = new Set(get().completedIds);

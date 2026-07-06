@@ -77,7 +77,7 @@ export function RoadmapDetails({ item, compact = false }: RoadmapDetailsProps) {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-white">Dependency</h3>
+        <h3 className="text-sm font-medium text-white">Syarat Pendahulu</h3>
         <div className="mt-3 flex flex-wrap gap-2">
           {item.dependencies.length > 0 ? (
             item.dependencies.map((dependencyId) => (
@@ -88,14 +88,14 @@ export function RoadmapDetails({ item, compact = false }: RoadmapDetailsProps) {
               />
             ))
           ) : (
-            <span className="text-sm text-zinc-400">Tidak ada dependency.</span>
+            <span className="text-sm text-zinc-400">Tidak ada syarat pendahulu.</span>
           )}
         </div>
       </div>
 
       {blockedDependencies.length > 0 && (
         <div className="rounded-lg border border-amber-300/20 bg-amber-300/10 p-3 text-sm leading-6 text-amber-100">
-          Syarat ini belum available karena masih menunggu{" "}
+          Syarat ini belum bisa dikerjakan karena masih menunggu{" "}
           {blockedDependencies
             .map((dependencyId) => roadmapItemMap.get(dependencyId)?.title ?? dependencyId)
             .join(", ")}

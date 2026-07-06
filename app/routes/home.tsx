@@ -7,7 +7,7 @@ export function meta({}: Route.MetaArgs) {
     {
       name: "description",
       content:
-        "Roadmap interaktif syarat yudisium dan wisuda FASILKOM UNSRI berbasis dependency graph.",
+        "Roadmap interaktif syarat yudisium dan wisuda FASILKOM UNSRI berbasis alur syarat.",
     },
   ];
 }

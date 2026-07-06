@@ -3,12 +3,13 @@ import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { motion } from "framer-motion";
 import { Check, Clock, LockKeyhole, Sparkles } from "lucide-react";
 import { cn } from "~/lib/utils";
-import type { ComputedRoadmapStatus, RoadmapItem } from "~/types/roadmap";
+import type { ComputedRoadmapStatus, RoadmapItem, RoadmapLayout } from "~/types/roadmap";
 
 export type RoadmapNodeData = {
   item: RoadmapItem;
   status: ComputedRoadmapStatus;
   dependencyCount: number;
+  layout: RoadmapLayout;
 };
 
 const statusConfig: Record<
@@ -43,8 +44,10 @@ const statusConfig: Record<
 
 function RoadmapNode({ data, selected }: NodeProps) {
   const nodeData = data as RoadmapNodeData;
-  const { item, status, dependencyCount } = nodeData;
+  const { item, status, dependencyCount, layout } = nodeData;
   const Icon = statusConfig[status].icon;
+  const targetPosition = layout === "vertical" ? Position.Top : Position.Left;
+  const sourcePosition = layout === "vertical" ? Position.Bottom : Position.Right;
 
   return (
     <motion.div
@@ -57,7 +60,7 @@ function RoadmapNode({ data, selected }: NodeProps) {
         selected && "ring-2 ring-white/70"
       )}
     >
-      <Handle type="target" position={Position.Left} className="!border-neutral-950 !bg-white" />
+      <Handle type="target" position={targetPosition} className="!border-neutral-950 !bg-white" />
       <div className="flex items-start gap-3">
         <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-white/10">
           <Icon className="size-4" aria-hidden="true" />
@@ -68,11 +71,11 @@ function RoadmapNode({ data, selected }: NodeProps) {
           </div>
           <div className="mt-1 text-sm font-semibold leading-snug text-white">{item.title}</div>
           <div className="mt-2 text-xs leading-relaxed text-current/70">
-            {item.estimate ?? "Menunggu info"} · {dependencyCount} dependency
+            {item.estimate ?? "Menunggu info"} · {dependencyCount} syarat awal
           </div>
         </div>
       </div>
-      <Handle type="source" position={Position.Right} className="!border-neutral-950 !bg-white" />
+      <Handle type="source" position={sourcePosition} className="!border-neutral-950 !bg-white" />
     </motion.div>
   );
 }
