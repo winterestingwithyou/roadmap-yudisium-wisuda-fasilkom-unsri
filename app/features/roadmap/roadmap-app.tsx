@@ -314,7 +314,7 @@ export function RoadmapApp() {
               className={cn(!isHydrated && "opacity-70")}
             >
               <Background variant={BackgroundVariant.Dots} gap={24} size={1.2} color="#3f3f46" />
-              <Controls className="!border-white/10 !bg-zinc-900/90 !text-white" />
+              <Controls className="roadmap-controls" />
               <MiniMap
                 pannable
                 zoomable

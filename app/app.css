@@ -148,3 +148,34 @@ body {
   writing-mode: vertical-rl;
   text-orientation: mixed;
 }
+
+.roadmap-controls {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0.75rem;
+  background: rgb(24 24 27 / 0.92);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+}
+
+.roadmap-controls .react-flow__controls-button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(24 24 27 / 0.92);
+  color: rgb(244 244 245);
+  fill: currentColor;
+}
+
+.roadmap-controls .react-flow__controls-button:hover {
+  background: rgb(39 39 42);
+}
+
+.roadmap-controls .react-flow__controls-button:last-child {
+  border-bottom: 0;
+}
+
+.roadmap-controls .react-flow__controls-button svg {
+  max-width: 1rem;
+  max-height: 1rem;
+  fill: currentColor;
+}
