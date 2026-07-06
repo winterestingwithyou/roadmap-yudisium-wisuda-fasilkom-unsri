@@ -1,87 +1,126 @@
-# Welcome to React Router!
+# Roadmap Yudisium & Wisuda FASILKOM UNSRI
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Web interaktif untuk membantu mahasiswa FASILKOM UNSRI memahami urutan penyelesaian syarat Yudisium dan Wisuda.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Aplikasi ini menampilkan persyaratan sebagai roadmap bergaya skill tree. Setiap syarat memiliki hubungan prasyarat, sehingga mahasiswa bisa melihat:
 
-## Features
+- syarat yang sudah selesai
+- syarat yang sudah bisa dikerjakan
+- syarat yang masih terkunci
+- tahapan yang akan datang
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+Progress disimpan di perangkat pengguna menggunakan IndexedDB, jadi aplikasi tidak membutuhkan login atau backend.
 
-## Getting Started
+## Fitur Utama
 
-### Installation
+- Roadmap interaktif dengan zoom dan pan
+- Tampilan alur atas-bawah atau kiri-kanan
+- Status syarat: selesai, bisa dikerjakan, terkunci, dan coming soon
+- Sidebar detail pada desktop
+- Bottom sheet detail pada mobile
+- Search dan filter status
+- Progress keseluruhan
+- Penyimpanan progress lokal dengan IndexedDB
+- Cascade completion untuk menjaga urutan syarat tetap benar
 
-Install the dependencies:
+## Tech Stack
+
+- React Router
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- React Flow
+- Zustand
+- Dexie
+- Framer Motion
+- Bun
+
+## Struktur Penting
+
+```txt
+app/
+  components/       Komponen UI reusable
+  data/             Data roadmap
+  features/         Fitur aplikasi
+  hooks/            Custom hook
+  lib/              Helper dan persistence
+  store/            Zustand store
+  types/            TypeScript types
+docs/
+  AGENTS.md         Aturan implementasi project
+  PRD.md            Product requirements
+  ROADMAP_DATA.md   Data awal roadmap
+```
+
+## Menjalankan Project
+
+Gunakan Bun sebagai package manager.
 
 ```bash
-npm install
+bun install
+bun run dev
 ```
 
-### Development
+Aplikasi akan berjalan di:
 
-Start the development server with HMR:
+```txt
+http://localhost:5173
+```
+
+## Script
 
 ```bash
-npm run dev
+bun run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
+Menjalankan development server.
 
 ```bash
-npm run build
+bun run typecheck
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+Menjalankan type generation React Router dan TypeScript check.
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+bun run build
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+Membuat production build.
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+```bash
+bun run start
 ```
 
-## Styling
+Menjalankan hasil build menggunakan server React Router.
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+## Update Data Roadmap
 
----
+Data roadmap utama berada di:
 
-Built with ❤️ using React Router.
+```txt
+app/data/roadmap.ts
+```
+
+Saat menambahkan syarat baru, pastikan:
+
+- setiap `id` unik
+- `dependencies` mengarah ke `id` syarat yang valid
+- posisi node tetap nyaman dibaca untuk layout atas-bawah dan kiri-kanan
+- teks yang tampil ke user memakai bahasa yang mudah dipahami
+
+Jika tipe `RoadmapNodeId` perlu bertambah, update juga:
+
+```txt
+app/types/roadmap.ts
+```
+
+## Dokumentasi Produk
+
+Dokumen produk dan aturan implementasi ada di folder:
+
+```txt
+docs/
+```
+
+Baca dokumen tersebut sebelum mengubah perilaku utama aplikasi.

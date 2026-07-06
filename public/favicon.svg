@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Roadmap Yudisium Wisuda FASILKOM UNSRI">
+  <rect width="64" height="64" rx="14" fill="#09090b"/>
+  <path d="M18 20h28M18 20v18M46 20v18M18 38h28" fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="18" cy="20" r="7" fill="#34d399"/>
+  <circle cx="46" cy="20" r="7" fill="#67e8f9"/>
+  <circle cx="18" cy="38" r="7" fill="#fbbf24"/>
+  <circle cx="46" cy="38" r="7" fill="#f8fafc"/>
+  <path d="M28 48l4 4 8-10" fill="none" stroke="#34d399" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
