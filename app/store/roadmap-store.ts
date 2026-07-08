@@ -25,7 +25,7 @@ function persist(completedIds: RoadmapNodeId[]) {
 
 export const useRoadmapStore = create<RoadmapState>((set, get) => ({
   completedIds: [],
-  selectedId: "repository",
+  selectedId: "library-clearance",
   filter: "all",
   layout: "vertical",
   query: "",

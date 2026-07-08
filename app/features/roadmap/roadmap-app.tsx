@@ -29,7 +29,7 @@ import { useRoadmapHydration } from "~/hooks/use-roadmap-hydration";
 import { getProgress, getRoadmapStatus, matchesRoadmapFilter } from "~/lib/roadmap";
 import { cn } from "~/lib/utils";
 import { useRoadmapStore } from "~/store/roadmap-store";
-import type { RoadmapFilter, RoadmapLayout, RoadmapNodeId } from "~/types/roadmap";
+import type { RoadmapFilter, RoadmapItem, RoadmapLayout, RoadmapNodeId } from "~/types/roadmap";
 
 const nodeTypes = {
   roadmapNode: RoadmapNode,
@@ -43,22 +43,61 @@ const filters: Array<{ value: RoadmapFilter; label: string }> = [
   { value: "coming-soon", label: "Coming Soon" },
 ];
 
-const verticalPositions: Record<RoadmapNodeId, { x: number; y: number }> = {
-  repository: { x: -290, y: 0 },
-  book: { x: 0, y: 0 },
-  sks112: { x: 290, y: 0 },
-  usept: { x: 580, y: 0 },
-  library: { x: -145, y: 250 },
-  yudisium: { x: 180, y: 520 },
-  graduation: { x: 180, y: 790 },
-};
+function getItemLevel(
+  item: RoadmapItem,
+  levels: Map<RoadmapNodeId, number>,
+  visiting = new Set<RoadmapNodeId>()
+): number {
+  const cachedLevel = levels.get(item.id);
 
-function getItemPosition(id: RoadmapNodeId, layout: RoadmapLayout) {
-  if (layout === "vertical") {
-    return verticalPositions[id];
+  if (cachedLevel !== undefined) {
+    return cachedLevel;
   }
 
-  return roadmapItemMap.get(id)?.position ?? { x: 0, y: 0 };
+  if (visiting.has(item.id) || item.dependencies.length === 0) {
+    levels.set(item.id, 0);
+    return 0;
+  }
+
+  visiting.add(item.id);
+
+  const level =
+    Math.max(
+      ...item.dependencies.map((dependencyId) => {
+        const dependency = roadmapItemMap.get(dependencyId);
+        return dependency ? getItemLevel(dependency, levels, visiting) : 0;
+      })
+    ) + 1;
+
+  visiting.delete(item.id);
+  levels.set(item.id, level);
+  return level;
+}
+
+function getLayoutPositions(layout: RoadmapLayout) {
+  const levels = new Map<RoadmapNodeId, number>();
+  const groupedItems = new Map<number, RoadmapItem[]>();
+  const positions = new Map<RoadmapNodeId, { x: number; y: number }>();
+
+  for (const item of roadmapItems) {
+    const level = getItemLevel(item, levels);
+    groupedItems.set(level, [...(groupedItems.get(level) ?? []), item]);
+  }
+
+  for (const [level, items] of groupedItems.entries()) {
+    items.forEach((item, index) => {
+      const offset = index - (items.length - 1) / 2;
+
+      positions.set(
+        item.id,
+        layout === "vertical"
+          ? { x: offset * 285, y: level * 260 }
+          : { x: level * 340, y: offset * 210 }
+      );
+    });
+  }
+
+  return positions;
 }
 
 function Toolbar() {
@@ -233,13 +272,14 @@ export function RoadmapApp() {
     [completedSet, filter, query]
   );
   const visibleIds = useMemo(() => new Set(visibleItems.map((item) => item.id)), [visibleItems]);
+  const layoutPositions = useMemo(() => getLayoutPositions(layout), [layout]);
 
   const nodes: Node<RoadmapNodeData>[] = useMemo(
     () =>
       visibleItems.map((item) => ({
         id: item.id,
         type: "roadmapNode",
-        position: getItemPosition(item.id, layout),
+        position: layoutPositions.get(item.id) ?? { x: 0, y: 0 },
         selected: item.id === selectedId,
         targetPosition: layout === "vertical" ? Position.Top : Position.Left,
         sourcePosition: layout === "vertical" ? Position.Bottom : Position.Right,
@@ -250,7 +290,7 @@ export function RoadmapApp() {
           layout,
         },
       })),
-    [completedSet, layout, selectedId, visibleItems]
+    [completedSet, layout, layoutPositions, selectedId, visibleItems]
   );
 
   const edges: Edge[] = useMemo(
