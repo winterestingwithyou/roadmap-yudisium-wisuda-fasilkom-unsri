@@ -322,8 +322,8 @@ export function RoadmapApp() {
   );
 
   return (
-    <main className="min-h-dvh overflow-hidden bg-neutral-950 text-white">
-      <div className="flex min-h-dvh flex-col">
+    <main className="h-dvh overflow-hidden bg-neutral-950 text-white">
+      <div className="flex h-dvh flex-col">
         <Toolbar />
         <div
           className={cn(
