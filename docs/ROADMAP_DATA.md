@@ -1422,3 +1422,51 @@ Dependencies
 Links
 
 - https://docs.google.com/forms/d/e/1FAIpQLSdPk5egxeesJizlL7L-mIO6A4ioyVF96jDrTuIo8sZISqt_8w/viewform
+
+---
+
+## Pendaftaran Wisuda
+
+ID
+
+graduation-registration
+
+Category
+
+graduation
+
+Status
+
+Coming Soon
+
+Difficulty
+
+Easy
+
+Location
+
+Online
+
+Estimate
+
+-
+
+DurationType
+
+Active
+
+EstimateMin
+
+0
+
+EstimateMax
+
+0
+
+Description
+
+Pendaftaran wisuda melalui aplikasi SIMAK/IAM.
+
+Dependencies
+
+- farewell-registration

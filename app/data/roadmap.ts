@@ -516,6 +516,24 @@ export const roadmapItems: RoadmapItem[] = [
       },
     ],
   },
+  {
+    id: "graduation-registration",
+    title: "Pendaftaran Wisuda",
+    category: "graduation",
+    baseStatus: "coming-soon",
+    difficulty: "easy",
+    location: "Online",
+    estimate: "-",
+    durationType: "active",
+    estimateMin: 0,
+    estimateMax: 0,
+    description: "Pendaftaran wisuda melalui aplikasi SIMAK/IAM.",
+    requirements: [],
+    dependencies: ["farewell-registration"],
+    warnings: [],
+    tips: [],
+    links: [],
+  },
 ];
 
 export const roadmapItemMap = new Map(roadmapItems.map((item) => [item.id, item]));
