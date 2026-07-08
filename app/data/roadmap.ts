@@ -89,7 +89,7 @@ export const roadmapItems: RoadmapItem[] = [
     description:
       "Cetak dan jilid skripsi/TA menggunakan hardcover warna silver. Cover dalam, Halaman Pengesahan, dan Halaman Persetujuan dicetak timbul.",
     requirements: ["File skripsi final"],
-    dependencies: ["thesis-completed", "approval-page", "abstract-page"],
+    dependencies: ["approval-page", "abstract-page", "thesis-completed"],
     warnings: ["Minimal siapkan dua buku."],
     tips: ["Tanyakan estimasi pengerjaan terlebih dahulu sebelum mencetak."],
     links: [],

@@ -77,23 +77,260 @@ function getItemLevel(
 function getLayoutPositions(layout: RoadmapLayout) {
   const levels = new Map<RoadmapNodeId, number>();
   const groupedItems = new Map<number, RoadmapItem[]>();
-  const positions = new Map<RoadmapNodeId, { x: number; y: number }>();
 
   for (const item of roadmapItems) {
     const level = getItemLevel(item, levels);
     groupedItems.set(level, [...(groupedItems.get(level) ?? []), item]);
   }
 
-  for (const [level, items] of groupedItems.entries()) {
-    items.forEach((item, index) => {
-      const offset = index - (items.length - 1) / 2;
+  // Determine DFS order to group related nodes together
+  const visited = new Set<RoadmapNodeId>();
+  const dfsOrder: RoadmapNodeId[] = [];
+  
+  // Find leaf nodes (nodes that are not dependencies of any other node)
+  const hasDependents = new Set<RoadmapNodeId>();
+  for (const item of roadmapItems) {
+    for (const depId of item.dependencies) {
+      hasDependents.add(depId);
+    }
+  }
+  const leafIds = roadmapItems.map(item => item.id).filter(id => !hasDependents.has(id));
 
-      positions.set(
-        item.id,
-        layout === "vertical"
-          ? { x: offset * 285, y: level * 260 }
-          : { x: level * 340, y: offset * 210 }
-      );
+  function dfs(id: RoadmapNodeId) {
+    if (visited.has(id)) return;
+    visited.add(id);
+    const item = roadmapItemMap.get(id);
+    if (item) {
+      for (const depId of item.dependencies) {
+        dfs(depId);
+      }
+    }
+    dfsOrder.push(id);
+  }
+
+  for (const id of leafIds) {
+    dfs(id);
+  }
+  for (const item of roadmapItems) {
+    dfs(item.id);
+  }
+
+  const orderMap = new Map(dfsOrder.map((id, index) => [id, index]));
+  const positions = new Map<RoadmapNodeId, { x: number; y: number }>();
+
+  const maxLevel = Math.max(...levels.values(), 0);
+
+  if (layout === "vertical") {
+    const xSpacing = 300;
+    const ySpacing = 260;
+
+    // Process level 0
+    const level0 = groupedItems.get(0) ?? [];
+    level0.sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0));
+    level0.forEach((item, index) => {
+      positions.set(item.id, { x: index * xSpacing, y: 0 });
+    });
+
+    // Process levels 1 to maxLevel
+    for (let l = 1; l <= maxLevel; l++) {
+      const items = groupedItems.get(l) ?? [];
+      const calculatedX = new Map<RoadmapNodeId, number>();
+
+      for (const item of items) {
+        let sumX = 0;
+        let count = 0;
+        for (const depId of item.dependencies) {
+          if (positions.has(depId)) {
+            sumX += positions.get(depId)!.x;
+            count++;
+          }
+        }
+        const initialX = count > 0 ? sumX / count : 0;
+        calculatedX.set(item.id, initialX);
+      }
+
+      // Sort items at this level by their calculated X
+      items.sort((a, b) => (calculatedX.get(a.id) ?? 0) - (calculatedX.get(b.id) ?? 0));
+
+      // Resolve collisions
+      const levelXCoords: number[] = [];
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        let x = calculatedX.get(item.id) ?? 0;
+        if (i > 0) {
+          const prevX = levelXCoords[i - 1];
+          if (x < prevX + xSpacing) {
+            x = prevX + xSpacing;
+          }
+        }
+        levelXCoords.push(x);
+        positions.set(item.id, { x, y: l * ySpacing });
+      }
+    }
+  } else {
+    // Horizontal layout
+    const xSpacing = 340;
+    const ySpacing = 220;
+
+    // Process level 0
+    const level0 = groupedItems.get(0) ?? [];
+    level0.sort((a, b) => (orderMap.get(a.id) ?? 0) - (orderMap.get(b.id) ?? 0));
+    level0.forEach((item, index) => {
+      positions.set(item.id, { x: 0, y: index * ySpacing });
+    });
+
+    // Process levels 1 to maxLevel
+    for (let l = 1; l <= maxLevel; l++) {
+      const items = groupedItems.get(l) ?? [];
+      const calculatedY = new Map<RoadmapNodeId, number>();
+
+      for (const item of items) {
+        let sumY = 0;
+        let count = 0;
+        for (const depId of item.dependencies) {
+          if (positions.has(depId)) {
+            sumY += positions.get(depId)!.y;
+            count++;
+          }
+        }
+        const initialY = count > 0 ? sumY / count : 0;
+        calculatedY.set(item.id, initialY);
+      }
+
+      // Sort items at this level by their calculated Y
+      items.sort((a, b) => (calculatedY.get(a.id) ?? 0) - (calculatedY.get(b.id) ?? 0));
+
+      // Resolve collisions
+      const levelYCoords: number[] = [];
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        let y = calculatedY.get(item.id) ?? 0;
+        if (i > 0) {
+          const prevY = levelYCoords[i - 1];
+          if (y < prevY + ySpacing) {
+            y = prevY + ySpacing;
+          }
+        }
+        levelYCoords.push(y);
+        positions.set(item.id, { x: l * xSpacing, y });
+      }
+    }
+  }
+
+  // Post-processing: Edge-node collision avoidance
+  if (layout === "vertical") {
+    const nodeWidth = 230;
+    const safeDistance = nodeWidth / 2 + 50; // half width + margin (e.g. 115 + 50 = 165)
+
+    for (let pass = 0; pass < 3; pass++) {
+      for (const item of roadmapItems) {
+        for (const depId of item.dependencies) {
+          const A = positions.get(depId);
+          const B = positions.get(item.id);
+          if (!A || !B) continue;
+
+          const yMin = Math.min(A.y, B.y);
+          const yMax = Math.max(A.y, B.y);
+
+          if (yMax - yMin < 10) continue; // same level, skip
+
+          for (const [id, pos] of positions.entries()) {
+            if (id === depId || id === item.id) continue;
+
+            if (pos.y > yMin + 5 && pos.y < yMax - 5) {
+              const t = (pos.y - A.y) / (B.y - A.y);
+              const edgeX = A.x + (B.x - A.x) * t;
+
+              const diffX = pos.x - edgeX;
+              if (Math.abs(diffX) < safeDistance) {
+                const shift = diffX >= 0 ? safeDistance - diffX : -safeDistance - diffX;
+                const level = levels.get(id);
+                const levelItems = groupedItems.get(level ?? 0) ?? [];
+
+                for (const sibling of levelItems) {
+                  const siblingPos = positions.get(sibling.id);
+                  if (siblingPos && siblingPos.y === pos.y) {
+                    if (shift > 0 && siblingPos.x >= pos.x) {
+                      positions.set(sibling.id, { x: siblingPos.x + shift, y: siblingPos.y });
+                    } else if (shift < 0 && siblingPos.x <= pos.x) {
+                      positions.set(sibling.id, { x: siblingPos.x + shift, y: siblingPos.y });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  } else {
+    // Horizontal layout
+    const nodeHeight = 80; // approximate height of node
+    const safeDistance = nodeHeight / 2 + 50; // half height + margin
+
+    for (let pass = 0; pass < 3; pass++) {
+      for (const item of roadmapItems) {
+        for (const depId of item.dependencies) {
+          const A = positions.get(depId);
+          const B = positions.get(item.id);
+          if (!A || !B) continue;
+
+          const xMin = Math.min(A.x, B.x);
+          const xMax = Math.max(A.x, B.x);
+
+          if (xMax - xMin < 10) continue; // same column, skip
+
+          for (const [id, pos] of positions.entries()) {
+            if (id === depId || id === item.id) continue;
+
+            if (pos.x > xMin + 5 && pos.x < xMax - 5) {
+              const t = (pos.x - A.x) / (B.x - A.x);
+              const edgeY = A.y + (B.y - A.y) * t;
+
+              const diffY = pos.y - edgeY;
+              if (Math.abs(diffY) < safeDistance) {
+                const shift = diffY >= 0 ? safeDistance - diffY : -safeDistance - diffY;
+                const level = levels.get(id);
+                const levelItems = groupedItems.get(level ?? 0) ?? [];
+
+                for (const sibling of levelItems) {
+                  const siblingPos = positions.get(sibling.id);
+                  if (siblingPos && siblingPos.x === pos.x) {
+                    if (shift > 0 && siblingPos.y >= pos.y) {
+                      positions.set(sibling.id, { x: siblingPos.x, y: siblingPos.y + shift });
+                    } else if (shift < 0 && siblingPos.y <= pos.y) {
+                      positions.set(sibling.id, { x: siblingPos.x, y: siblingPos.y + shift });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Shift entire graph so that the bounding box is centered around 0
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+
+  for (const pos of positions.values()) {
+    if (pos.x < minX) minX = pos.x;
+    if (pos.x > maxX) maxX = pos.x;
+    if (pos.y < minY) minY = pos.y;
+    if (pos.y > maxY) maxY = pos.y;
+  }
+
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+
+  for (const [id, pos] of positions.entries()) {
+    positions.set(id, {
+      x: pos.x - centerX,
+      y: pos.y - centerY,
     });
   }
 
@@ -305,7 +542,7 @@ export function RoadmapApp() {
               source: dependencyId,
               target: item.id,
               animated: status === "available",
-              type: "smoothstep",
+              type: "default",
               style: {
                 stroke:
                   status === "completed"
