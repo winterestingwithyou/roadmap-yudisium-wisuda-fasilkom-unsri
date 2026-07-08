@@ -537,25 +537,54 @@ export function RoadmapApp() {
           .filter((dependencyId) => visibleIds.has(dependencyId) && visibleIds.has(item.id))
           .map((dependencyId) => {
             const status = getRoadmapStatus(item, completedSet);
+            const isHighlighted = selectedId
+              ? item.id === selectedId || dependencyId === selectedId
+              : false;
+
+            const isDimmed = selectedId && !isHighlighted;
+
+            let strokeColor = "#71717a"; // zinc-500 (brighter than zinc-600)
+            if (status === "completed") {
+              strokeColor = "#34d399";
+            } else if (status === "available") {
+              strokeColor = "#67e8f9";
+            }
+
+            if (isHighlighted) {
+              if (status === "completed") {
+                strokeColor = "#10b981"; // Bright emerald
+              } else if (status === "available") {
+                strokeColor = "#22d3ee"; // Bright cyan
+              } else {
+                strokeColor = "#cbd5e1"; // Slate-300 (clearly visible highlighted locked)
+              }
+            }
+
+            const strokeWidth = isHighlighted
+              ? 3.5
+              : isDimmed
+                ? 1.5
+                : status === "available"
+                  ? 2.5
+                  : 2;
+
             return {
               id: `${dependencyId}-${item.id}`,
               source: dependencyId,
               target: item.id,
-              animated: status === "available",
+              animated: isHighlighted ? true : (isDimmed ? false : status === "available"),
               type: "default",
+              zIndex: isHighlighted ? 10 : 1,
               style: {
-                stroke:
-                  status === "completed"
-                    ? "#34d399"
-                    : status === "available"
-                      ? "#67e8f9"
-                      : "#52525b",
-                strokeWidth: status === "available" ? 2.5 : 2,
+                stroke: strokeColor,
+                strokeWidth,
+                transition: "stroke 0.2s, stroke-width 0.2s, opacity 0.2s",
+                opacity: isHighlighted ? 1 : isDimmed ? 0.35 : 0.7,
               },
             };
           })
       ),
-    [completedSet, visibleIds]
+    [completedSet, visibleIds, selectedId]
   );
 
   return (
