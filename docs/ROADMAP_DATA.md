@@ -794,7 +794,7 @@ EstimateMax
 
 Description
 
-Unduh template sesuai program studi, lengkapi data, lalu kumpulkan tanda tangan dosen pembimbing, program studi, Perpustakaan FASILKOM, dan UPT Perpustakaan. Tanda tangan UPT Perpustakaan diperoleh saat menyerahkan buku.
+Unduh template sesuai program studi, lengkapi data, lalu kumpulkan tanda tangan dosen pembimbing, program studi, Perpustakaan FASILKOM, dan UPT Perpustakaan. Tanda tangan dari Perpustakaan FASILKOM dan UPT Perpustakaan diperoleh saat menyerahkan buku ke masing-masing tempat tersebut.
 
 Dependencies
 
@@ -806,7 +806,7 @@ Links
 
 ---
 
-## Penyerahan Buku Skripsi/TA ke UPT Perpustakaan
+## Penyerahan Buku Skripsi/TA ke Perpustakaan
 
 ID
 
@@ -826,7 +826,7 @@ Easy
 
 Location
 
-UPT Perpustakaan UNSRI
+Perpustakaan FASILKOM & UPT Perpustakaan UNSRI
 
 Estimate
 
@@ -846,7 +846,12 @@ EstimateMax
 
 Description
 
-Serahkan buku skripsi/TA ke UPT Perpustakaan UNSRI sekaligus memperoleh tanda tangan terakhir pada Surat Tanda Terima Skripsi/TA.
+Serahkan buku skripsi/TA masing-masing ke Perpustakaan FASILKOM UNSRI dan UPT Perpustakaan UNSRI untuk memperoleh tanda tangan tanda terima dari kedua tempat tersebut. Pastikan Anda telah menyiapkan Buku Skripsi/TA yang sudah dicap serta Surat Tanda Terima Skripsi/TA.
+
+Requirements
+
+- Buku Skripsi/TA yang sudah dicap
+- Surat Tanda Terima Skripsi/TA
 
 Dependencies
 
