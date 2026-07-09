@@ -1358,7 +1358,7 @@ Easy
 
 Location
 
-Ruang PPT
+Ruang PPT, Palembang
 
 Estimate
 
@@ -1378,7 +1378,13 @@ EstimateMax
 
 Description
 
-Serahkan potongan Form Validasi, SK Yudisium, dan Surat Bukti Pendaftaran IAM & Kinobi ke Admin Kemahasiswaan.
+Serahkan potongan Form Validasi, SK Yudisium, dan Surat Bukti Pendaftaran IAM & Kinobi ke Admin Kemahasiswaan di Ruang PPT, Palembang.
+
+Requirements
+
+- Potongan Form Validasi
+- Surat Keputusan (SK) Yudisium
+- Surat Bukti Pendaftaran IAM & Kinobi
 
 Dependencies
 
