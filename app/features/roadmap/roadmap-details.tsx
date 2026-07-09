@@ -115,7 +115,19 @@ function InfoList({
       </h3>
       <ul className="mt-2 grid gap-1.5 text-sm leading-6">
         {items.map((entry) => (
-          <li key={entry}>{entry}</li>
+          <li key={entry} className="flex items-start gap-2">
+            <span
+              className={cn(
+                "mt-2.5 size-1.5 shrink-0 rounded-full",
+                tone === "warning"
+                  ? "bg-amber-400/80"
+                  : tone === "tip"
+                    ? "bg-cyan-400/80"
+                    : "bg-zinc-400"
+              )}
+            />
+            <span className="flex-1">{entry}</span>
+          </li>
         ))}
       </ul>
     </div>
