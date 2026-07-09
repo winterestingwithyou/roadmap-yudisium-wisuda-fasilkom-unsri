@@ -402,15 +402,26 @@ export const roadmapItems: RoadmapItem[] = [
     estimateMin: 60,
     estimateMax: 60,
     description:
-      "Cetak Form Validasi, lengkapi seluruh persyaratan, kemudian serahkan berkas sesuai lokasi pendaftaran.",
-    requirements: ["Form Validasi", "Berkas pendukung sesuai checklist"],
+      "Cetak Form Validasi dan lengkapi seluruh persyaratan yudisium offline. Bagi mahasiswa kampus Indralaya, pendaftaran dilakukan di Ruang PPT, Palembang. Sedangkan bagi mahasiswa kampus Palembang, pendaftaran dilakukan di Ruang Administrasi Comlab, Palembang.",
+    requirements: [
+      "Form Validasi",
+      "Surat Tanda Terima Skripsi/TA (Form Penerimaan Laporan)",
+      "Surat Keputusan (SK) Yudisium",
+      "Fotokopi Ijazah Terakhir",
+      "Daftar Kumpulan Nilai (DKN)",
+      "Fotokopi Bukti Bayaran UKT Terakhir",
+      "Fotokopi KTP",
+      "Map plastik sesuai dengan ketentuan program studi",
+    ],
     dependencies: [
       "thesis-receipt",
       "simak-yudisium-registration",
       "dkn-print",
       "yudisium-decree",
     ],
-    warnings: [],
+    warnings: [
+      "Warna map plastik harus sesuai dengan program studi: Sistem Informasi (Merah), Teknik Informatika (Biru), Sistem Komputer (Kuning), Manajemen Informatika (Biru), Komputerisasi (Merah), Teknik Komputer (Kuning), Magister Ilmu Komputer (Hijau).",
+    ],
     tips: [],
     links: [
       {
