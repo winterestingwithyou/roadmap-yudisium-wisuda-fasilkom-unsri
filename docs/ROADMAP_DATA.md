@@ -1160,6 +1160,7 @@ Cetak Form Validasi dan lengkapi seluruh persyaratan yudisium offline. Bagi maha
 Requirements
 
 - Form Validasi
+- Upload Softfile Laporan Tesis/Skripsi/Projek
 - Surat Tanda Terima Skripsi/TA (Form Penerimaan Laporan)
 - Surat Keputusan (SK) Yudisium
 - Fotokopi Ijazah Terakhir
@@ -1181,7 +1182,11 @@ Warnings
 
 Links
 
-- https://drive.google.com/file/d/1LILesiPKrJu8CZcvjjpBqwrzTUG8DOzn/view
+- https://docs.google.com/document/d/1Yaxf2xkne-z6vNInNzVaDuBUxiQNEZgB/edit?usp=sharing&ouid=110401949030602587412&rtpof=true&sd=true
+- https://bit.ly/LaporanTesis_S2
+- https://bit.ly/LaporanSkripsi_S1Indralaya
+- https://bit.ly/LaporanSkripsi_S1Palembang
+- https://bit.ly/LaporanProjekD3
 
 ---
 

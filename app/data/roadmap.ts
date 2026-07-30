@@ -405,6 +405,7 @@ export const roadmapItems: RoadmapItem[] = [
       "Cetak Form Validasi dan lengkapi seluruh persyaratan yudisium offline. Bagi mahasiswa kampus Indralaya, pendaftaran dilakukan di Ruang PPT, Palembang. Sedangkan bagi mahasiswa kampus Palembang, pendaftaran dilakukan di Ruang Administrasi Comlab, Palembang.",
     requirements: [
       "Form Validasi",
+      "Upload Softfile Laporan Tesis/Skripsi/Projek",
       "Surat Tanda Terima Skripsi/TA (Form Penerimaan Laporan)",
       "Surat Keputusan (SK) Yudisium",
       "Fotokopi Ijazah Terakhir",
@@ -426,7 +427,23 @@ export const roadmapItems: RoadmapItem[] = [
     links: [
       {
         label: "Form Validasi",
-        href: "https://drive.google.com/file/d/1LILesiPKrJu8CZcvjjpBqwrzTUG8DOzn/view",
+        href: "https://docs.google.com/document/d/1Yaxf2xkne-z6vNInNzVaDuBUxiQNEZgB/edit?usp=sharing&ouid=110401949030602587412&rtpof=true&sd=true",
+      },
+      {
+        label: "Upload Laporan Tesis (S2)",
+        href: "https://bit.ly/LaporanTesis_S2",
+      },
+      {
+        label: "Upload Laporan Skripsi S1 (Indralaya)",
+        href: "https://bit.ly/LaporanSkripsi_S1Indralaya",
+      },
+      {
+        label: "Upload Laporan Skripsi S1 (Palembang)",
+        href: "https://bit.ly/LaporanSkripsi_S1Palembang",
+      },
+      {
+        label: "Upload Laporan Projek (D3)",
+        href: "https://bit.ly/LaporanProjekD3",
       },
     ],
   },

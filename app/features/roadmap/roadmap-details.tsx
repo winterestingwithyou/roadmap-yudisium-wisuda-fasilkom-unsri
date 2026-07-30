@@ -204,7 +204,7 @@ export function RoadmapDetails({ item, compact = false }: RoadmapDetailsProps) {
 
       <div>
         <h3 className="text-sm font-medium text-white">Link</h3>
-        <div className="mt-3">
+        <div className="mt-3 flex flex-col gap-2">
           {item.links.length > 0 ? (
             item.links.map((link) => (
               <a
