@@ -1451,11 +1451,71 @@ Links
 
 ---
 
-## Pendaftaran Wisuda
+## Verifikasi Pendaftaran Yudisium oleh Direktorat Akademik
 
 ID
 
-graduation-registration
+dir-akad-yudisium-verification
+
+Category
+
+yudisium
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+SIMAK UNSRI
+
+Estimate
+
+Beberapa hari
+
+DurationType
+
+Waiting
+
+EstimateMin
+
+0
+
+EstimateMax
+
+0
+
+Description
+
+Setelah pendaftaran yudisium offline diserahkan, data pendaftaran pada SIMAK akan diverifikasi secara berjenjang oleh Program Studi, Fakultas, hingga Direktorat Akademik UNSRI. Mahasiswa perlu memantau penerbitan PISN (Penomoran Ijazah Nasional) untuk melangkah ke tahap wisuda.
+
+Dependencies
+
+- offline-yudisium-registration
+
+Warnings
+
+- Durasi verifikasi Direktorat Akademik bervariasi. Pengesahan biasanya membutuhkan waktu beberapa hari kerja setelah verifikasi tingkat fakultas disetujui.
+
+Tips
+
+- Lakukan pengecekan status verifikasi SIMAK secara berkala pada menu Yudisium.
+
+Links
+
+-
+
+---
+
+## Pembelian Toga dan Gordon Wisuda
+
+ID
+
+toga-gordon-purchase
 
 Category
 
@@ -1463,7 +1523,125 @@ graduation
 
 Status
 
-Coming Soon
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+Gedung Rektorat UNSRI Indralaya
+
+Estimate
+
+30 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+30
+
+EstimateMax
+
+30
+
+Description
+
+Proses pembelian atribut resmi wisuda berupa Toga (lengkap dengan topi & selempang fakultas) dan Gordon di Gedung Rektorat UNSRI Indralaya.
+
+Requirements
+
+- Biaya Toga: Rp150.000 (Lengkap dengan Topi & Selempang Fakultas)
+- Biaya Gordon: Rp75.000
+
+Dependencies
+
+-
+
+Tips
+
+- Narahubung Pembelian Toga & Gordon: Iah Febri (081394477799) dan Pak Mijan (081373212997).
+
+Links
+
+-
+
+---
+
+## Penyerahan Gordon ke Bagian Kemahasiswaan
+
+ID
+
+gordon-submission
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+Bagian Kemahasiswaan FASILKOM
+
+Estimate
+
+5 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+5
+
+EstimateMax
+
+5
+
+Description
+
+Penyerahan Gordon fisik yang telah dibeli ke staf Admin Kemahasiswaan FASILKOM. Gordon ini akan disiapkan oleh panitia sebagai perlengkapan resmi pada prosesi Acara Pelepasan Yudisium.
+
+Requirements
+
+- Gordon fisik resmi dari Rektorat
+
+Dependencies
+
+- farewell-registration
+- toga-gordon-purchase
+
+Links
+
+-
+
+---
+
+## Unggah Slide Presentasi (PPT) Yudisium
+
+ID
+
+yudisium-ppt-upload
+
+Category
+
+graduation
+
+Status
+
+Available
 
 Difficulty
 
@@ -1475,7 +1653,131 @@ Online
 
 Estimate
 
--
+15 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+15
+
+EstimateMax
+
+15
+
+Description
+
+Pengunggahan berkas slide presentasi (PPT) profil kelulusan mahasiswa yang akan ditampilkan pada layar prosesi Acara Pelepasan Yudisium melalui Google Form resmi. Format dan template slide dapat diunduh langsung dari deskripsi formulir tersebut.
+
+Requirements
+
+- Berkas Slide PPT Yudisium (sesuai template resmi)
+
+Dependencies
+
+- farewell-registration
+
+Tips
+
+- Pastikan data kelulusan dan foto diri pada slide PPT sudah sesuai dengan format template sebelum diunggah.
+
+Links
+
+- https://forms.gle/hrXKEUbkLT88Wz8J9
+
+---
+
+## Penyerahan Berkas Kartu Hasil Studi (KHS) ke Bagian Kemahasiswaan
+
+ID
+
+khs-submission
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Medium
+
+Location
+
+Bagian Kemahasiswaan FASILKOM
+
+Estimate
+
+15 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+15
+
+EstimateMax
+
+15
+
+Description
+
+Penyerahan fisik dokumen Kartu Hasil Studi (KHS) ke Admin Kemahasiswaan FASILKOM dengan ketentuan berdasarkan berkas yang diunggah saat Registrasi Pelepasan Alumni:
+1. Opsi A (Mengunggah KHS Asli 1-Akhir): Bebas dari kewajiban menyerahkan KHS fisik.
+2. Opsi B (Mengunggah Screenshot SIMAK, tapi memiliki KHS Asli lengkap): Wajib menyerahkan hardcopy KHS Asli lengkap semester 1 s.d. akhir.
+3. Opsi C (Mengunggah Screenshot SIMAK & KHS Asli tidak lengkap/hilang): Wajib menyerahkan 3 berkas pengganti (Surat Pernyataan Bermaterai, KHS Asli yang tersisa, dan Surat Bukti Screenshot KHS SIMAK untuk semester yang hilang).
+
+Requirements
+
+- Dokumen KHS Asli Lengkap (Semester 1 - Akhir) ATAU Berkas Kelengkapan Pengganti KHS (sesuai ketentuan)
+
+Dependencies
+
+- farewell-registration
+
+Tips
+
+- Jika membutuhkan salinan KHS resmi, manfaatkan tautan Drive KHS FASILKOM yang telah disediakan.
+
+Links
+
+- https://docs.google.com/document/d/1ZE9eFkE2DGgnNBPakFfLSvGgP0uZ3Kh5/edit?usp=sharing&ouid=101997043980491208331&rtpof=true&sd=true
+- https://drive.google.com/drive/folders/18xJmXWowuf6xAF_8apMZQmOMtTvG8mns?usp=drive_link
+
+---
+
+## Pelaksanaan Acara Pelepasan Yudisium
+
+ID
+
+yudisium-event
+
+Category
+
+yudisium
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+FASILKOM UNSRI
+
+Estimate
+
+1 hari
 
 DurationType
 
@@ -1491,8 +1793,364 @@ EstimateMax
 
 Description
 
-Pendaftaran wisuda melalui aplikasi SIMAK/IAM.
+Prosesi resmi Acara Pelepasan Yudisium Fakultas Ilmu Komputer Universitas Sriwijaya. Selamat atas pencapaian gelar akademik dan pengukuhan kelulusan Anda!
 
 Dependencies
 
-- farewell-registration
+- khs-submission
+- yudisium-ppt-upload
+- gordon-submission
+
+Tips
+
+- Hadir tepat waktu sesuai instruksi panitia yudisium dan kenakan busana resmi/toga sesuai ketentuan fakultas.
+
+Links
+
+-
+
+---
+
+## Pendaftaran Wisuda Online via SIMAK UNSRI
+
+ID
+
+simak-graduation-registration
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+SIMAK UNSRI
+
+Estimate
+
+15 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+15
+
+EstimateMax
+
+15
+
+Description
+
+Pengisian formulir pendaftaran wisuda secara online di portal SIMAK UNSRI setelah Penomoran Ijazah Nasional (PISN) terverifikasi. Setelah melakukan finalisasi pendaftaran, mahasiswa wajib mengunduh dan mencetak Form Registrasi Wisuda.
+
+Requirements
+
+- PISN (Penomoran Ijazah Nasional) yang telah terverifikasi
+- Hasil cetak (hardcopy) Form Registrasi Wisuda SIMAK
+
+Dependencies
+
+- dir-akad-yudisium-verification
+
+Tips
+
+- Saran Penting: Sebelum dicetak, ketiklah data Nama, NIM, dan NIP pada kolom tanda tangan Form Registrasi Wisuda secara digital agar hasil cetakan rapi dan profesional.
+
+Links
+
+- https://simak.unsri.ac.id
+
+---
+
+## Pengesahan Form Registrasi Wisuda oleh Ketua Program Studi
+
+ID
+
+kaprodi-regis-signing
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+Program Studi
+
+Estimate
+
+15 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+15
+
+EstimateMax
+
+15
+
+Description
+
+Pengajuan tanda tangan persetujuan pada lembar Form Registrasi Wisuda yang telah dicetak kepada Ketua Program Studi (Kaprodi) masing-masing.
+
+Requirements
+
+- Hardcopy Form Registrasi Wisuda SIMAK
+
+Dependencies
+
+- simak-graduation-registration
+
+Links
+
+-
+
+---
+
+## Verifikasi Berkas Wisuda Offline di Admin Fakultas
+
+ID
+
+offline-graduation-checklist
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Medium
+
+Location
+
+Admin Fakultas FASILKOM
+
+Estimate
+
+30 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+30
+
+EstimateMax
+
+30
+
+Description
+
+Pemeriksaan kelengkapan dan verifikasi fisik berkas pendaftaran wisuda oleh Admin Fakultas FASILKOM. Mahasiswa menyerahkan seluruh persyaratan dokumen sesuai daftar lembar checklist wisuda, ditambah dokumen bukti screenshot PDDikti.
+
+Requirements
+
+- Form Registrasi Wisuda (Telah ditandatangani Kaprodi)
+- Lembar Checklist Berkas Pendaftaran Wisuda
+- Dokumen Cetak Screenshot Profil PDDikti
+- Berkas Administrasi Wisuda Pendukung
+
+Dependencies
+
+- kaprodi-regis-signing
+
+Links
+
+-
+
+---
+
+## Pengesahan Form Registrasi Wisuda oleh Dekan Fakultas
+
+ID
+
+dekan-regis-signing
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+Dekanat FASILKOM
+
+Estimate
+
+15 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+15
+
+EstimateMax
+
+15
+
+Description
+
+Pengajuan pengesahan dan tanda tangan akhir Form Registrasi Wisuda kepada Dekan FASILKOM UNSRI. Pengajuan wajib melampirkan Form Registrasi Wisuda, lembar Checklist yang telah diparaf Admin Fakultas, dan Surat Screenshot PDDikti.
+
+Requirements
+
+- Form Registrasi Wisuda
+- Lembar Checklist Berkas (Telah diverifikasi Admin Fakultas)
+- Dokumen Cetak Screenshot Profil PDDikti
+
+Dependencies
+
+- offline-graduation-checklist
+
+Links
+
+-
+
+---
+
+## Penyerahan Berkas Wisuda ke Biro Akademik & Kemahasiswaan (BAK) UNSRI
+
+ID
+
+bak-submission
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Medium
+
+Location
+
+BAK UNSRI (Indralaya)
+
+Estimate
+
+30 menit
+
+DurationType
+
+Active
+
+EstimateMin
+
+30
+
+EstimateMax
+
+30
+
+Description
+
+Penyerahan seluruh berkas pendaftaran wisuda fisik yang telah disahkan Dekan dan dichecklist Fakultas ke Kantor BAK UNSRI Kampus Indralaya. Penyerahan ini menandai tahap akhir pendaftaran wisuda untuk kemudian diverifikasi penuh oleh Direktorat Akademik.
+
+Requirements
+
+- Form Registrasi Wisuda (Telah disahkan Dekan)
+- Lembar Checklist Verifikasi Fakultas
+- Berkas Persyaratan Wisuda Lengkap
+
+Dependencies
+
+- dekan-regis-signing
+
+Links
+
+-
+
+---
+
+## Pelaksanaan Acara Wisuda Universitas Sriwijaya
+
+ID
+
+graduation-event
+
+Category
+
+graduation
+
+Status
+
+Available
+
+Difficulty
+
+Easy
+
+Location
+
+UNSRI Indralaya
+
+Estimate
+
+1 hari
+
+DurationType
+
+Active
+
+EstimateMin
+
+0
+
+EstimateMax
+
+0
+
+Description
+
+Prosesi pengukuhan Wisuda Resmi Universitas Sriwijaya di Kampus Indralaya. Selamat atas pencapaian luar biasa dan kelulusan akademik Anda!
+
+Dependencies
+
+- bak-submission
+
+Links
+
+-
+
+---
